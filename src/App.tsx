@@ -6,6 +6,7 @@ const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [text, setText] = useState<string>('');
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
@@ -13,13 +14,14 @@ function App() {
     });
   }, []);
 
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
+  const createTodo = () => {
+    client.models.Todo.create({ content: text });
   }
 
   return (
     <main>
       <h1>My todos</h1>
+      <input value={text} onChange={(e) => setText(e.target.value)}/>
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
